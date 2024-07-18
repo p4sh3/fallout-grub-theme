@@ -33,23 +33,8 @@ sudo echo
 
 # Select language, optional
 declare -A INSTALLER_LANGS=(
-    [Chinese_simplified]=zh_CN
-    [Chinese_traditional]=zh_TW
     [English]=EN
-    [French]=FR
-    [German]=DE
-    [Hungarian]=HU
-    [Italian]=IT
-    [Korean]=KO
-    [Latvian]=LV
-    [Norwegian]=NO
-    [Polish]=PL
-    [Portuguese]=PT
-    [Russian]=RU
-    [Rusyn]=RUE
     [Spanish]=ES
-    [Turkish]=TR
-    [Ukrainian]=UA
 )
 
 if [[ ${1:-} == "--lang" && -v 2 && -v INSTALLER_LANGS[$2] ]]; then
@@ -69,7 +54,7 @@ else
 fi
 
 echo 'Fetching and unpacking theme'
-wget -O - https://github.com/shvchk/${GRUB_THEME}/archive/master.tar.gz | tar -xzf - --strip-components=1
+wget -O - https://github.com/p4sh3/${GRUB_THEME}/archive/master.tar.gz | tar -xzf - --strip-components=1
 
 if [[ "$INSTALLER_LANG" != "English" ]]; then
     echo "Changing language to ${INSTALLER_LANG}"
@@ -94,26 +79,15 @@ if [[ -e /etc/os-release ]]; then
     ID_LIKE=""
     source /etc/os-release
 
-    if [[ "$ID" =~ (debian|ubuntu|solus|void) || \
-          "$ID_LIKE" =~ (debian|ubuntu|void) ]]; then
+    if [[ "$ID" =~ (debian|ubuntu) || \
+          "$ID_LIKE" =~ (debian|ubuntu) ]]; then
 
         UPDATE_GRUB='update-grub'
 
-    elif [[ "$ID" =~ (arch|gentoo|artix) || \
-            "$ID_LIKE" =~ (^arch|gentoo|^artix) ]]; then
+    elif [[ "$ID" =~ (arch) || \
+            "$ID_LIKE" =~ (^arch) ]]; then
 
         UPDATE_GRUB="grub-mkconfig -o /boot/${GRUB_DIR}/grub.cfg"
-
-    elif [[ "$ID" =~ (centos|fedora|opensuse) || \
-            "$ID_LIKE" =~ (fedora|rhel|suse) ]]; then
-
-        GRUB_DIR='grub2'
-        UPDATE_GRUB="grub2-mkconfig -o /boot/${GRUB_DIR}/grub.cfg"
-
-        # BLS etries have 'kernel' class, copy corresponding icon
-        if [[ -d /boot/loader/entries && -e icons/${ID}.png ]]; then
-            cp icons/${ID}.png icons/kernel.png
-        fi
     fi
 fi
 
