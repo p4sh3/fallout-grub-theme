@@ -48,3 +48,15 @@ terminal-border: "0"
   color = "#67d97a"
   font = "Fixedsys Regular 32"
 }
+
++ progress_bar {
+  id = "__timeout__"
+  left = 0%
+  width = 100%
+  top = 100%
+  height = 23
+  show_text = true
+  text_color = "255, 255, 255"
+  bar_style = "progress_bar_*.png"
+  highlight_style = "progress_highlight_*.png"
+}
